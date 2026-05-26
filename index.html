@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocClassify — AI Document Classifier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">DocClassify</span>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-tab="train" onclick="switchTab('train')">Train</button>
+        <button class="nav-btn" data-tab="classify" onclick="switchTab('classify')">Classify</button>
+        <button class="nav-btn" data-tab="examples" onclick="switchTab('examples')">
+          Examples <span class="badge" id="ex-badge">0</span>
+        </button>
+      </nav>
+      <div class="header-stats">
+        <span class="hstat"><span id="h-examples">0</span> examples</span>
+        <span class="hstat"><span id="h-labels">0</span> labels</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- TRAIN PANEL -->
+    <section class="panel active" id="panel-train">
+      <div class="panel-intro">
+        <h1 class="panel-title">Train the classifier</h1>
+        <p class="panel-sub">Add labeled text examples. The more examples per label, the better the AI learns to distinguish between categories.</p>
+        <button class="ghost-btn" onclick="loadDefaults()">↗ Load sample dataset</button>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h2 class="card-title">1. Define labels</h2>
+          <div class="input-row">
+            <input id="label-input" type="text" class="text-input" placeholder="e.g. Legal, Finance, HR..." onkeydown="if(event.key==='Enter')addLabel()" />
+            <button class="primary-btn" onclick="addLabel()">Add</button>
+          </div>
+          <div id="label-pills" class="pill-row"></div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">2. Add training text</h2>
+          <textarea id="train-text" class="textarea" rows="5" placeholder="Paste a document excerpt here..."></textarea>
+          <div class="assign-row">
+            <span class="assign-label">Assign to:</span>
+            <div id="assign-pills" class="pill-row"></div>
+          </div>
+          <button class="primary-btn full-btn" onclick="addExample()">Add training example</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASSIFY PANEL -->
+    <section class="panel" id="panel-classify">
+      <div class="panel-intro">
+        <h1 class="panel-title">Classify a document</h1>
+        <p class="panel-sub">Paste any document and the AI will classify it using your training examples as context.</p>
+      </div>
+
+      <div class="classify-layout">
+        <div class="card classify-input-card">
+          <h2 class="card-title">Document text</h2>
+          <textarea id="classify-text" class="textarea" rows="8" placeholder="Paste the document you want to classify..."></textarea>
+          <button class="primary-btn full-btn" onclick="classifyDoc()" id="classify-btn">
+            Classify document →
+          </button>
+        </div>
+
+        <div class="classify-result-area" id="classify-result">
+          <div class="result-placeholder">
+            <div class="placeholder-icon">⬡</div>
+            <p>Classification result will appear here</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXAMPLES PANEL -->
+    <section class="panel" id="panel-examples">
+      <div class="panel-intro">
+        <h1 class="panel-title">Training examples</h1>
+        <p class="panel-sub">All examples used to teach the classifier. Remove any that are inaccurate.</p>
+        <button class="ghost-btn danger-btn" onclick="clearAll()">Clear all</button>
+      </div>
+      <div id="examples-list" class="examples-grid"></div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
